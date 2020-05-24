@@ -2,7 +2,7 @@
 pyemoji/emoji.py
 
 wriiten by: Oliver Cordes 2020-05-15
-changed by: Oliver Cordes 2020-05-17
+changed by: Oliver Cordes 2020-05-24
 
 """
 
@@ -10,6 +10,12 @@ changed by: Oliver Cordes 2020-05-17
 # References:
 #   https://www.webfx.com/tools/emoji-cheat-sheet/
 #   http://www.unicode.org/emoji/charts/full-emoji-list.html
+
+"""
+Standard modules
+"""
+import re
+
 
 # people
 
@@ -121,7 +127,9 @@ hankey = '\U0001F4A9'
 poop = hankey
 shit = hankey
 thumbsup = '\U0001F44D'
+thumbs_up = thumbsup
 thumbsdown = '\U0001F44E'
+thumbs_down = thumbsdown
 ok_hand = '\U0001F44C'
 punch = '\U0001F44A'
 facepunch = '\U0001F44A'
@@ -234,3 +242,30 @@ trollface = ''
 
 # eat and drink
 #beer = :beer:
+
+# function part
+"""
+now it cames to some functions in the emoji library, which are simple
+and using some python tricks!
+"""
+
+# emojis converted into a dictionary
+__emojis = [attr for attr in dir() if (not attr.startswith('__')) and (not callable(globals()[attr]))]
+__emojis_dict = {':'+i+':' : globals()[i] for i in __emojis if globals()[i] != ''}
+
+# regexp pattern for
+emoji_pattern = re.compile(r':[a-zA-Z][a-zA-Z0-9_-]*:')
+
+"""
+emojize use a regular expression to replace a :emoji_name: word
+with the correct unicode if available; multiple occurrences are
+allowed!
+"""
+
+def emojize(s):
+
+    def repl(matchobj):
+        emoji_name = matchobj.group(0)
+        return __emojis_dict.get(emoji_name, ':not known:')
+
+    return emoji_pattern.sub(repl, s)
