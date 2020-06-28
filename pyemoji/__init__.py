@@ -5,6 +5,7 @@ written by: Oliver Cordes 2020-05-15
 changed by: Oliver Cordes 2020-05-17
 """
 
+from .emoji import *
 
 __author__ = 'Oliver Cordes'
 __version__ = '0.0.1'
